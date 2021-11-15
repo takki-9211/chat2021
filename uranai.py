@@ -60,7 +60,6 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             position: relative;
             overflow: hidden;
         }
-
         /* アイコン画像 */
         .icon-img {
             position: absolute;
@@ -69,23 +68,19 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             width: 80px;
             height: 80px;
         }
-
         /* アイコン画像（左） */
         .icon-img-left {
             left: 0;
         }
-
         /* アイコン画像（右） */
         .icon-img-right {
             right: 0;
         }
-
         /* アイコン画像 */
         .icon-img img {
             border-radius: 50%;
             border: 2px solid #eee;
         }
-
         /* アイコンネーム */
         .icon-name {
             position: absolute;
@@ -95,28 +90,23 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             color: #fff;
             font-size: 10px;
         }
-
         /* アイコンネーム（左） */
         .icon-name-left {
             left: 0;
         }
-
         /* アイコンネーム（右） */
         .icon-name-right {
             right: 0;
         }
-
         /* 吹き出し */
         .sb-side {
             position: relative;
             float: left;
             margin: 0 105px 40px 105px;
         }
-
         .sb-side-right {
             float: right;
         }
-
         /* 吹き出し内のテキスト */
         .sb-txt {
             position: relative;
@@ -128,12 +118,10 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             line-height: 1.7;
             padding: 18px;
         }
-
         .sb-txt>p:last-of-type {
             padding-bottom: 0;
             margin-bottom: 0;
         }
-
         /* 吹き出しの三角 */
         .sb-txt:before {
             content: "";
@@ -142,7 +130,6 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             top: 16px;
             z-index: 3;
         }
-
         .sb-txt:after {
             content: "";
             position: absolute;
@@ -150,61 +137,50 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             top: 15px;
             z-index: 2;
         }
-
         /* 吹き出しの三角（左） */
         .sb-txt-left:before {
             left: -7px;
             border-width: 7px 10px 7px 0;
             border-color: transparent #eee transparent transparent;
         }
-
         .sb-txt-left:after {
             left: -10px;
             border-width: 8px 10px 8px 0;
             border-color: transparent #eee transparent transparent;
         }
-
         /* 吹き出しの三角（右） */
         .sb-txt-right:before {
             right: -7px;
             border-width: 7px 0 7px 10px;
             border-color: transparent transparent transparent #eee;
         }
-
         .sb-txt-right:after {
             right: -10px;
             border-width: 8px 0 8px 10px;
             border-color: transparent transparent transparent #eee;
         }
-
         /* 767px（iPad）以下 */
-
         @media (max-width: 767px) {
-
             .icon-img {
                 width: 60px;
                 height: 60px;
             }
-
             /* アイコンネーム */
             .icon-name {
                 width: 60px;
                 top: 62px;
                 font-size: 9px;
             }
-
             /* 吹き出し（左） */
             .sb-side-left {
                 margin: 0 0 30px 78px;
                 /* 吹き出し（左）の上下左右の余白を狭く */
             }
-
             /* 吹き出し（右） */
             .sb-side-right {
                 margin: 0 78px 30px 0;
                 /* 吹き出し（右）の上下左右の余白を狭く */
             }
-
             /* 吹き出し内のテキスト */
             .sb-txt {
                 padding: 12px;
@@ -234,3 +210,33 @@ def run_chat(chat = chat, start='占いするよ', **kw):
   output.register_callback('notebook.Convert', convert)
   if start is not None:
     display_bot(start)
+
+# フレーム 状態をもつ辞書
+# 'name', 'birthday', 'asking'
+frame = {}
+
+def myuranai(input_text):
+  global frame # 外部の状態を参照する
+  if 'asking' in frame:  # asking から更新する
+    frame[frame['asking']] = input_text
+    del frame['asking']
+
+  if 'name' not in frame:
+    frame['asking'] = 'name' # 名前をたずねる  
+    return 'あなたの名前は？'
+
+  if 'name' in frame and 'birthday' not in frame:
+    frame['asking'] = 'birthday' # 誕生日をたずねる    
+    return 'あなたの誕生日は？'
+
+  if 'name' in frame and 'birthday' in frame:
+    # 占います
+    number = hash(frame['name']+frame['birthday']) % 10
+    if number > 5:
+      return 'あなたの運勢は大吉'
+    return 'あなたの運勢は吉'
+
+  return output_text
+
+def start():
+  run_chat(chat=myuranai)    
