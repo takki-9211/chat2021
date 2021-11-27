@@ -4,11 +4,6 @@ import IPython
 from google.colab import output
 
 
-n = 0 
-def chat(text, **kw):  #チャット用の関数（ここを書き換える）
-  global n
-  n += 1
-  return 'ほ' * n
 
 # アイコンの指定
 BOT_ICON = 'https://2.bp.blogspot.com/-mRJKwyORJkQ/Wn1ZTOBrszI/AAAAAAABKKs/Bg5yjLL9RYwmfUM0pEkBA3Ky3ui0IOZWQCLcBGAs/s800/animal_smile_inu.png'
