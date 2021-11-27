@@ -58,6 +58,7 @@ def run_chat(chat = chat, start='占いするよ', **kw):
       <style>
         /* 全体 */
         .sb-box {
+            background-color: #CC9999;
             position: relative;
             overflow: hidden;
         }
